@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}  
+
+{% block title %}
+  coucou loulou
+{% endblock title %} 
+
+
+{% block body %}
+
+
+
+<h1>{{ title }}</h1>
+    <p>ca va ?</p>
+    <h1>{{ title | upper }}</h1>
+
+<a href="{{ path('hello', {'prenom':'toto', 'age':56}) }} ">goto hello</a>
+    {#commentaire en twig #}
+    {% if age >= 18 %}
+    <p>adulte</p>
+    {% elseif age >5 %}
+    <p>ado</p>
+    {% else %}
+    <p>enfant</p>
+    {% endif %}
+
+    <br />
+
+    {% for p in tab %}
+    <p>{{ p }}</p>
+    {% endfor %}
+
+    {% for p, age in tab2 %}
+    <p>id= {{loop.index0}} {{ p }} : {{ age }} ans </p>
+    {% endfor %}
+
+
+    {% endblock body %}
