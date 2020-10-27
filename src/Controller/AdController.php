@@ -76,6 +76,8 @@ class AdController extends AbstractController
                 $manager->persist($img);
             }
 
+            $a->setAuthor($this->getUser());
+
             $manager->persist($a);
             $manager->flush();
 

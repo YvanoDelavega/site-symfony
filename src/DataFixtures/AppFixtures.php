@@ -20,7 +20,14 @@ class AppFixtures extends Fixture
         $this->encoder = $encoder;
     }
 
-
+/**
+ * php bin/console make:fixtures
+ * 
+ * php bin/console doctrine:fixtures:load
+ *
+ * @param ObjectManager $manager
+ * @return void
+ */
     public function load(ObjectManager $manager)
     {
         $fake = Factory::create('FR-fr');
@@ -36,7 +43,7 @@ class AppFixtures extends Fixture
             $picture = "https://randomuser.me/api/portraits/";
             $pictureId = $fake->numberBetween(1, 99) . '.jpg';
 
-            $picture .= ($genre == "male" ? "men/" : "women") . $pictureId;
+            $picture .= ($genre == "male" ? "men/" : "women/") . $pictureId;
 
             $hash = $this->encoder->encodePassword($user, 'password');
 
@@ -44,7 +51,7 @@ class AppFixtures extends Fixture
                 ->setLastName($fake->lastname)
                 ->setEmail($fake->email)
                 ->setIntroduction($fake->sentence())
-                ->setDescription('p' . join('</p><p>', $fake->paragraphs(3)) . '</p>')
+                ->setDescription('<p>' . join('</p><p>', $fake->paragraphs(3)) . '</p>')
                 ->setHash($hash)
                 ->setPicture($picture);
 
@@ -61,7 +68,7 @@ class AppFixtures extends Fixture
             // $slug = $slugify->slugify($title);
             $codeImage  = "http://loremflickr.com/300/200?random$i"; //$fake->imageUrl(200, 100);
             $introduction = $fake->paragraph(2);
-            $content = 'p' . join('</p><p>', $fake->paragraphs(5)) . '</p>';
+            $content = '<p>' . join('</p><p>', $fake->paragraphs(5)) . '</p>';
 
             $user = $users[mt_rand(0, count($users) - 1)];
 

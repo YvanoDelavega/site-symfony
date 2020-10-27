@@ -6,41 +6,8 @@ endblock %} {% block body %}
   <div class="row my-3">
     {% for ad in ads %}
 
-{% set pathurl = path('ads_show', { slug: ad.slug }) %}
+      {%include 'ad/_ad.html.twig'%}
 
-    <div class="col-md-4">
-      <div class="card bg-light mb-3">
-        <card class="card-header text-center">
-          {{ ad.rooms }} chambres, <strong>{{ ad.price }}&euro; / nuit</strong>
-          <br />
-          <small>pas encore noté</small>
-        </card>
-        <a href="{{ pathurl }}">
-          <img
-            src="{{ ad.coverImage }}"
-            alt="imade de l'appartement"
-            style="height: 200px"
-            width:100px;
-            display:block
-          />
-        </a>
-
-        <div class="card-body">
-          <a href="{{ pathurl }}">
-            <h4 class="card-title">{{ ad.title }}</h4>
-          </a>
-          <p class="card-text">
-            {{ ad.introduction }}
-          </p>
-          <a
-            href="{{ pathurl }}"
-            class="btn btn-secondary"
-          >
-            en savoir plus</a
-          >
-        </div>
-      </div>
-    </div>
     {% endfor %}
     <div class="col"></div>
   </div>
