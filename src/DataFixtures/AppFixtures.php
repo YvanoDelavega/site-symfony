@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Ad;
 use Faker\Factory;
 //use Cocur\Slugify\Slugify;
+use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Image;
 use Doctrine\Persistence\ObjectManager;
@@ -30,8 +31,24 @@ class AppFixtures extends Fixture
  */
     public function load(ObjectManager $manager)
     {
-        $fake = Factory::create('FR-fr');
+        $fake = Factory::create('fr_FR');
         //  $slugify = new Slugify();
+
+        // gestion des roles
+        $adminRole = new Role();
+        $adminRole->setTitle("ROLE_ADMIN");
+        $manager->persist($adminRole);
+
+        $adminUser = new User();
+        $adminUser->setFirstName("Yvan")
+        ->setLastName("GILLES")
+        ->setEmail("ygilles@gmail.fr")
+        ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+        ->setPicture("https://randomuser.me/api/portraits/lego/5.jpg")
+        ->setIntroduction($fake->sentence())
+        ->setDescription('<p>' . join('</p><p>', $fake->paragraphs(3)) . '</p>')
+        ->addUseRole($adminRole);
+        $manager->persist($adminUser);
 
         //gestion des utiliseurs
         $users = [];

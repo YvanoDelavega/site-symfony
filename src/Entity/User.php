@@ -86,6 +86,11 @@ class User implements UserInterface
      */
     private $ads;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Role::class, mappedBy="users")
+     */
+    private $useRoles;
+
 
     public function getFullName()
     {
@@ -114,6 +119,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->ads = new ArrayCollection();
+        $this->useRoles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -250,7 +256,19 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        // dump($this->useRoles);
+
+        // converti la liste d'ovjet en liste de title
+        $roles = $this->useRoles->map(function ($role) {
+            return $role->getTitle();
+        })->toArray();
+
+        // ajoute le role par défaut
+        $roles[] = 'ROLE_USER';
+
+        // dump($roles);
+        // die();
+        return $roles;
     }
 
     public function getPassword()
@@ -270,5 +288,33 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * @return Collection|Role[]
+     */
+    public function getUseRoles(): Collection
+    {
+        return $this->useRoles;
+    }
+
+    public function addUseRole(Role $useRole): self
+    {
+        if (!$this->useRoles->contains($useRole)) {
+            $this->useRoles[] = $useRole;
+            $useRole->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUseRole(Role $useRole): self
+    {
+        if ($this->useRoles->contains($useRole)) {
+            $this->useRoles->removeElement($useRole);
+            $useRole->removeUser($this);
+        }
+
+        return $this;
     }
 }
