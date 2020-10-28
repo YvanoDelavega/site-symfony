@@ -11,75 +11,97 @@
     <h1>Votre Réservation n° {{ booking.id }} </h1>
 
 
-{% if app.request.query.get('withAlert') %}
-<div class="alert alert-success">
-    <h4 class="alert alert-heading">Bravo !</h4>
-    <p>
-        Votre réservation auprès de 
-        <strong><a href="{{path('user_show', {'slug': author.slug})}}">{{author.fullname}}</a></strong>
-        pour l'annonce 
-        <a href="{{path('ads_show', {'slug': ad.slug})}}">{{ ad.title}}</a>
-        a bien été prise en compte
-    </p>
-</div>
-{% endif %}
+    {% if app.request.query.get('withAlert') %}
+    <div class="alert alert-success">
+        <h4 class="alert alert-heading">Bravo !</h4>
+        <p>
+            Votre réservation auprès de
+            <strong><a href="{{path('user_show', {'slug': author.slug})}}">{{author.fullname}}</a></strong>
+            pour l'annonce
+            <a href="{{path('ads_show', {'slug': ad.slug})}}">{{ ad.title}}</a>
+            a bien été prise en compte
+        </p>
+    </div>
+    {% endif %}
 
-   <div class="row">
-       <div class="col">
-           <div class="alert alert-light">
-               <h2>Détails</h2>
-               <dl class="row">
-                <dt class="col-md-4">Numéro</dt>
-                <dt class="col-md-8">{{ booking.id }}</dt>
-                <dt class="col-md-4">Date d'arrivée</dt>
-                <dt class="col-md-8">{{ booking.startDate | date('d/m/Y')}}</dt>
-                <dt class="col-md-4">Date de départ</dt>
-                <dt class="col-md-8">{{ booking.endDate  | date('d/m/Y')}}</dt>
-                <dt class="col-md-4">Nombre de nuits</dt>
-                <dt class="col-md-8">{{ booking.duration }}</dt>
-                <dt class="col-md-4">Montant total</dt>
-                <dt class="col-md-8">{{ booking.amount }} &euro;</dt>
-                <dt class="col-md-4">Commentaire</dt>
-                <dt class="col-md-8">{{ booking.comment }}</dt>                   
-               </dl>
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-light">
+                <h2>Détails</h2>
+                <dl class="row">
+                    <dt class="col-md-4">Numéro</dt>
+                    <dt class="col-md-8">{{ booking.id }}</dt>
+                    <dt class="col-md-4">Date d'arrivée</dt>
+                    <dt class="col-md-8">{{ booking.startDate | date('d/m/Y')}}</dt>
+                    <dt class="col-md-4">Date de départ</dt>
+                    <dt class="col-md-8">{{ booking.endDate  | date('d/m/Y')}}</dt>
+                    <dt class="col-md-4">Nombre de nuits</dt>
+                    <dt class="col-md-8">{{ booking.duration }}</dt>
+                    <dt class="col-md-4">Montant total</dt>
+                    <dt class="col-md-8">{{ booking.amount }} &euro;</dt>
+                    <dt class="col-md-4">Commentaire</dt>
+                    <dt class="col-md-8">{{ booking.comment |default("Aucun commentaire")}}</dt>
+                </dl>
 
-               <hr>
+                <hr>
 
-               <h2 class="alert-heading">Votre hôte</h2>
+                <h2 class="alert-heading">Votre hôte</h2>
 
-               <div class="row">
-                   <div class="col-3">
-                       <img src="{{author.picture}}" alt="" class="avatar avatar-medium" alt="Avatar de {{author.fullname}}">
-                   </div>
-                   <div class="col-9">
-                       <h4>
-                       <a href="{{path('user_show', {'slug': author.slug})}}">{{ author.fullname }} </a>
+                <div class="row">
+                    <div class="col-3">
+                        <img src="{{author.picture}}" alt="" class="avatar avatar-medium"
+                            alt="Avatar de {{author.fullname}}">
+                    </div>
+                    <div class="col-9">
+                        <h4>
+                            <a href="{{path('user_show', {'slug': author.slug})}}">{{ author.fullname }} </a>
+                        </h4>
+                        <span class="badge badge-primary">{{ author.ads|length}} annonce(s)</span>
+                    </div>
+                    {{ author.description | raw }}
 
-                      
-                    </h4>
-                   
-                   </div>
-                   {{ author.description | raw }}
+                    <a href="{{path('user_show', {'slug': author.slug})}}" class="btn btn-primary">Plus
+                        d'informations</a>
+                </div>
+            </div>
 
-                   <a href="{{path('user_show', {'slug': author.slug})}}" class="btn btn-primary">Plus d'informations</a>
-               </div>
-           </div>
-       </div>
-       <div class="col">
-        <div class="alert alert-light">
-            <h2 class="alert-heading">Votre hébergement</h2>
-            <h4>
-                <a href="{{path('ads_show', {'slug': ad.slug})}}">{{ ad.title }} </a>
-             </h4>
+            <div class="alert alert-light" id="comment">
+                <h2 class="alert-heading">Votre avis compte !</h2>
+                {% if date() > date(booking.endDate) %}
 
-             <img src="{{ad.coverImage}}" alt="{{ad.title}}" class="img-fluid" >
+                    {% set comment = booking.ad.commentFromAuthor(app.user) %}
 
-             {{ ad.content | raw }}
+                    {% if comment is not null %}
+                        <blockquote>{{comment.content}}</blockquote>
+                        <strong>Note : </strong> {% include "partials/rating.html.twig" with {'rating': comment.rating}  %}
+                    {% else %}
+                        {{ form_start(form)}}
+                        {{ form_widget(form)}}
+                        <button type="submit" class="btn btn-success">Enregistrer votre avis</button>
+                        {{ form_end(form)}}
+                    {% endif %}
 
-             <a href="{{path('ads_show', {'slug': ad.slug})}}" class="btn btn-primary">Plus d'informations</a>
+                {% else %}
+                    Vous ne pouvez pas noter cette annonce tant que votre voyage n'est pas terminé
+                {% endif %}
+            </div>
+
         </div>
-       </div>
-   </div>
+        <div class="col">
+            <div class="alert alert-light">
+                <h2 class="alert-heading">Votre hébergement</h2>
+                <h4>
+                    <a href="{{path('ads_show', {'slug': ad.slug})}}">{{ ad.title }} </a>
+                </h4>
+
+                <img src="{{ad.coverImage}}" alt="{{ad.title}}" class="img-fluid w-100">
+
+                {{ ad.content | raw }}
+
+                <a href="{{path('ads_show', {'slug': ad.slug})}}" class="btn btn-primary">Plus d'informations</a>
+            </div>
+        </div>
+    </div>
 
 </div>
 {% endblock %}
