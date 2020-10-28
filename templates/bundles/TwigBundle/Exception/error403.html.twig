@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Interdit{% endblock title %}
+
+{% block body %}
+
+<!-- https://127.0.0.1:8000/_error/404 -->
+
+<div class="container">
+
+    <h1>C'est pas autorisé !</h1>
+    <div class="alert alert-danger">
+        <p>Vous n'avez pas le droit d'accéder à cette annonce</p>
+        {# <p>{{ exception.message }}</p> #}
+    </div>
+    <br>
+    <a href="{{ path('homepage') }}" class="btn btn-primary">Retour à l'accueil</a>
+    <a href="{{ path('ads_index') }}" class="btn btn-success">Nos annonces</a>
+
+</div>
+
+{% endblock body %}
