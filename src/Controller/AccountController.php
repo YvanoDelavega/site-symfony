@@ -109,24 +109,24 @@ class AccountController extends AbstractController
         $form = $this->createForm(PasswordUpdateType::class, $pu);
         $form->handleRequest($request);
         dump($pu);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-  
-             if (!password_verify($pu->getOldPassword(), $user->getHash())) {
-                 $this->addFlash('danger', 'Le mot de passe actuel est incorrect');
 
-                 $form->get('oldPassword')->addError(new FormError("Le mot de passe actuel est incorrect !"));
-             } else {
-                 $newpwd = $pu->getNewPassword();
-                 $hash = $encoder->encodePassword($user, $newpwd);
-                 $user->setHash($hash);
-                 $manager->persist($user);
-                 $manager->flush();
+            if (!password_verify($pu->getOldPassword(), $user->getHash())) {
+                $this->addFlash('danger', 'Le mot de passe actuel est incorrect');
 
-                 $this->addFlash('success', 'Le nouveau mot de passe a bien été enregistré');
-                 return $this->redirectToRoute('homepage');
-             }
-        }        
+                $form->get('oldPassword')->addError(new FormError("Le mot de passe actuel est incorrect !"));
+            } else {
+                $newpwd = $pu->getNewPassword();
+                $hash = $encoder->encodePassword($user, $newpwd);
+                $user->setHash($hash);
+                $manager->persist($user);
+                $manager->flush();
+
+                $this->addFlash('success', 'Le nouveau mot de passe a bien été enregistré');
+                return $this->redirectToRoute('homepage');
+            }
+        }
 
         return $this->render('account/password.html.twig', [
             'form' => $form->createView()
@@ -134,19 +134,30 @@ class AccountController extends AbstractController
     }
 
 /**
- * permet d'afficher le profil de l'utilisateur connecté
- * 
- * @Route("/account", name="account_index")
- * @IsGranted("ROLE_USER")
+ * affiche les liste des réservations d'un utilisateur
+ * @Route("/account/bookings", name="account_bookings")
  *
  * @return Response
  */
-public function myAccount()
+public function bookings()
 {
-    return $this->render('user/index.html.twig', [
-        'user' => $this->getUser()
-    ]);
+    return $this->render('account/bookings.html.twig');
 }
+
+    /**
+     * permet d'afficher le profil de l'utilisateur connecté
+     * 
+     * @Route("/account", name="account_index")
+     * @IsGranted("ROLE_USER")
+     *
+     * @return Response
+     */
+    public function myAccount()
+    {
+        return $this->render('user/index.html.twig', [
+            'user' => $this->getUser()
+        ]);
+    }
 
     /**
      * permet de se déconnecter

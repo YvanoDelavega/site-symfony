@@ -31,18 +31,20 @@ class Booking
      */
     private $ad;
 
-// Why do I receive “This value should be of type string” when using a DateTime constraint on Symfony 5?
+    // Why do I receive “This value should be of type string” when using a DateTime constraint on Symfony 5?
     // rq : https://stackoverflow.com/questions/60227679/why-do-i-receive-this-value-should-be-of-type-string-when-using-a-datetime-con
 
     /**
      * @ORM\Column(type="datetime")
      * @Assert\Type("\DateTimeInterface")
+     * @Assert\GreaterThan("today", message="La date d'arrivée doit être supérieur à aujourd'hui")
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="datetime")
      * @Assert\Type("\DateTimeInterface")
+     * @Assert\GreaterThan(propertyPath="startDate", message="La date de départ doit être supérieur à la date d'arrivée")
      */
     private $endDate;
 
@@ -61,20 +63,18 @@ class Booking
      */
     private $comment;
 
-/**
- * @ORM\PrePersist     
- *
- * @return void
- */
+    /**
+     * @ORM\PrePersist     
+     *
+     * @return void
+     */
     public function prePersist()
     {
-        if (empty($this->createdAt))
-        {
+        if (empty($this->createdAt)) {
             $this->createdAt = new \DateTime();
         }
 
-        if (empty($this->amount))
-        {
+        if (empty($this->amount)) {
             $this->amount = $this->ad->getPrice() * $this->GetDuration();
         }
     }
@@ -84,6 +84,56 @@ class Booking
         $diff = $this->endDate->diff(($this->startDate));
         return $diff->days;
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function IsBookableDates()
+    {
+        // 1. connaitre les dates impossibles pour l'annonce
+        $notAvailablebookingDays = $this->ad->getNotAvailableDays();
+
+        // 2 comparer les dates choisies avec les dates impossibles
+        $bookingDays = $this->getDays();
+
+        // convertit les jours en string pour faciliter la comparaison
+        $days = array_map(function ($day) {
+            return $day->format('Y-m-d');
+        }, $bookingDays);
+
+        $notAvailableDays = array_map(function ($day) {
+            return $day->format('Y-m-d');
+        }, $notAvailablebookingDays);
+
+        foreach ($days as $d) {
+            if (array_search($d, $notAvailableDays) !== false) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * permet de récupérer un tableau de journées qui correspondent à ma réservation
+     *
+     * @return array de DateTime 
+     */
+    public function getDays()
+    {
+        $res = range(
+            $this->startDate->getTimestamp(),
+            $this->endDate->getTimestamp(),
+            24 * 60 * 60 // 24h en seconds
+        );
+        // convertit les timestamp en jours
+        $days = array_map(function ($dayTimestamp) {
+            return new \DateTime(date('Y-m-d', $dayTimestamp));
+        }, $res);
+
+        return $days;
+    }
+
 
     public function getId(): ?int
     {

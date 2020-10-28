@@ -103,6 +103,31 @@ class Ad
         }
     }
 
+    /**
+     * permet d'obtenir un tableau de jours qi ne sont pas disponibles pour cette annonce
+     *
+     * @return array un tableau d'objet DateTime représentant les jours d'occupation
+     */
+    public function getNotAvailableDays()
+    {
+        $notAvailableDays = [];
+        foreach ($this->bookings as $b) {
+            // calculer les jours qui se trouvent entre la date d'arrivée et de départ
+            $res = range(
+                $b->getStartDate()->getTimestamp(),
+                $b->getEndDate()->getTimestamp(),
+                24 * 60 * 60 // 24h en seconds
+            );
+            // convertit les timestamp en jours
+            $days = array_map(function ($dayTimestamp) {
+                return new \DateTime(date('Y-m-d', $dayTimestamp));
+            }, $res);
+
+            $notAvailableDays = array_merge($notAvailableDays, $days);
+        }
+
+        return $notAvailableDays;
+    }
 
     public function getId(): ?int
     {
