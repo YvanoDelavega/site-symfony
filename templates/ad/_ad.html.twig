@@ -3,7 +3,7 @@
 <div class="col-md-4">
     <div class="card bg-light mb-3">
         <card class="card-header text-center">
-            {{ ad.rooms }} chambres, <strong>{{ ad.price }}&euro; / nuit</strong>
+            {{ ad.rooms }} chambres, <strong>{{ ad.price |number_format(2, ',', ' ') }} &euro; / nuit</strong>
             <br />
 
 {% if ad.comments|length>0 %}
@@ -16,8 +16,8 @@
             
         </card>
         <a href="{{ pathurl }}">
-            <img src="{{ ad.coverImage }}" alt="imade de l'appartement" style="height: 200px" width:100px;
-                display:block />
+            <img src="{{ ad.coverImage }}" alt="image de l'appartement" style="height: 200px; width:100%;
+                display:block" />
         </a>
 
         <div class="card-body">
@@ -27,7 +27,7 @@
             <p class="card-text">
                 {{ ad.introduction }}
             </p>
-            <a href="{{ pathurl }}" class="btn btn-secondary">                en savoir plus</a>
+            <a href="{{ pathurl }}" class="btn btn-primary float-right">en savoir plus</a>
             {% if app.user is same as (ad.author) %}
     <a href="{{ path('ads_edit', {'slug':ad.slug}) }}" class="btn btn-secondary">Modifier l'annonce</a>
     {% endif %}
