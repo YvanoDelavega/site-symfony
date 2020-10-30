@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for b in bookings %}
+            {% for b in pagination.data %}
                 <tr>
                     <td>{{ b.id }}</td>
                     <td>{{ b.createdAt | date('m/d/Y H:i') }}</td>
@@ -39,6 +39,10 @@
             {% endfor %}
         </tbody>
     </table>
+
+    {# {% include 'admin/partials/pagination.html.twig' with {'route':"admin_booking_index"} %} #}
+    {{ pagination.display() }}
+ 
 </div>
 
 {% endblock %}

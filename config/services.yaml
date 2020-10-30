@@ -21,6 +21,12 @@ services:
             - '../src/Kernel.php'
             - '../src/Tests/'
 
+    # https://symfony.com/doc/current/service_container/autowiring.html
+    App\Service\PaginationService:
+        autowire: true 
+        arguments: 
+            $templatePath: 'admin/partials/pagination.html.twig'
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
