@@ -16,13 +16,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class BookingController extends AbstractController
 {
     /**
+     * permet d'effectuer une reservation
+     * 
      * @Route("/ads/{slug}/book", name="booking_create")
      * @IsGranted("ROLE_USER")
      */
     public function book(Ad $ad, Request $request, EntityManagerInterface $manager)
     {
         $booking = new Booking();
-        $form = $this->createForm(BookingType::class, $booking);
+        $form = $this->createForm(BookingType::class, $booking
+        // peut se mettre dans le formulaire directement : donc BookingType dans ce cas
+      //  , [            "validation_groups" => ["Default", "Front"]         ]
+    );
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -52,6 +57,7 @@ class BookingController extends AbstractController
     }
 
     /**
+     * Affiche le détail d'une réservation et permet de saisir un commentaire
      * @Route("/booking/{id}", name="booking_show")
      */
     public function show(Booking $booking, Request $request, EntityManagerInterface $manager)

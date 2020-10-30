@@ -65,3 +65,7 @@ span.rating i {
 .alert .btn{
     color: white;
 }
+
+.th-2btn {
+    width: 140px;
+}

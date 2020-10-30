@@ -59,7 +59,7 @@ class AdminAdController extends AbstractController
      *
      * @return Response
      */
-    public function delete(Ad $a, Request $request, EntityManagerInterface $manager)
+    public function delete(Ad $a, EntityManagerInterface $manager)
     {
 
         if (count($a->getBookings())) {
