@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion à l'administration</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css"
+        integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
+
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .card {
+            margin: 10%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h4 class="card-title">
+                    <i class="fas fa-lock"></i>
+                    Connexion à l'administration
+                </h4>
+            </div>
+
+            <div class="card-body">
+
+                {% if hasError %}
+                    <div class="alert alert-danger">Le login ou le mot de passe est invalide</div>
+                {% endif %}
+
+
+                <form method="POST">
+                    <div class="form-group"><label for="_username">Email</label><input type="text" class="form-control"
+                            placeholder="Adresse email..." name="_username" required value="{{ username }}"></div>
+                    <div class="form-group"><label for="_password">Mot de passe</label><input type="text"
+                            class="form-control" placeholder="Mot de passe..." name="_password" required></div>
+                    <div class="form-group mt-2">
+
+                        <a href="{{ path('homepage') }}" class="btn btn-link">
+                            <i class="fas fa-arrow-circle-left"></i>
+                            Retour au site
+                        </a>
+
+                        <button class="btn btn-primary  float-right">
+                            <i class="fas fa-lock-open"></i>
+                            Connexion
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
