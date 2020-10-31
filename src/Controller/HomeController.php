@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 
+use App\Repository\AdRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,19 +42,21 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="homepage")
      */
-    public function home()
+    public function home(AdRepository $adRepo, UserRepository $userRepo)
     {
         //return new Response("<h1>bonjour</h1>");
 
-        $prenoms = ["po", "lo", "yiyi"];
-        $age = ["po" => 1, "lo" => 2, "yiyi" => 23];
+        // $prenoms = ["po", "lo", "yiyi"];
+        // $age = ["po" => 1, "lo" => 2, "yiyi" => 23];
 
         return $this->render(
             'home.html.twig',
             [
-                'title' => "bonjour a tous", 'age' => 6,
-                'tab' => $prenoms,
-                'tab2' => $age
+                'ads'=>$adRepo->findBestAds(3),
+                'users'=>$userRepo->findBestUsers(4)
+                // 'title' => "bonjour a tous", 'age' => 6,
+                // 'tab' => $prenoms,
+                // 'tab2' => $age
 
             ]
 
