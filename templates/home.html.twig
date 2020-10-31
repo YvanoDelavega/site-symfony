@@ -29,13 +29,21 @@
     <div class="col-md-6">
       <div class="card border-secondary mb-3">
         <div class="card-body">
-          <h4 class="card-title">{{u.user.fullName}}</h4>
-          {% if u.avgRatings>0 %}
-          {% include 'partials/rating.html.twig' with {'rating': u.avgRatings} %}
-          {% else %}
-          <small>pas encore noté</small>
-          {% endif %}
+          <div class="row">
+            <div class="col">
+              <h4 class="card-title">{{u.user.fullName}}</h4>
+            </div>
+            <div class="col-4 align-right">
+              {% if u.avgRatings>0 %}
+              {% include 'partials/rating.html.twig' with {'rating': u.avgRatings} %}
+              {% else %}
+              <small>pas encore noté</small>
+              {% endif %}
+            </div>
+          </div>
+
           <hr>
+          
           <div class="card-text">
             <img src="{{u.user.picture}}" alt="avatar" class="float-left mr-3">
             <p>{{u.user.introduction | raw}}</p>

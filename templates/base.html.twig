@@ -8,9 +8,8 @@
     user-scalable=no : l'utilisateur ne zoom pas sur cette page #}
 <meta name="viewport" content="width=device-width, user-scalable=no">
 
-    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ asset('build/css/app.css') }}" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/common.css" />
     
     {% block stylesheets %}{% endblock %}
   </head>
@@ -21,10 +20,15 @@
     {% block body %}{% endblock %}
 
     {% include "/partials/footer.html.twig" %}
-
-    <script src="/js/jquery.min.js"></script>
+    <script src="/js0/jquery.min.js"></script>
+    <script src="/js0/popper.min.js"></script>
+    <script src="/js0/bootstrap.min.js"></script>
+   <!-- <script src="/js/jquery.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+  <script src="{{ asset('build/js/app.js') }}"></script>
+  -->
+
     {% block javascripts %}{% endblock %}
   </body>
 </html>
