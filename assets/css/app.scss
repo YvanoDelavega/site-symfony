@@ -5,7 +5,9 @@ div.container-fluid {
   margin-top: 20px;
 }
 
-div.ad-title {
+//  bug bizarre dans firefox, si je met comme nom "ad-title" ca ne marche pas, la div ayant la classe ad-title
+// n'apparait pas. Mais si je mets ad-title1, ca fonctione... !!!
+div.ad-title1 {
   padding: 2em;
   background-size: cover;
   background-position: center;
