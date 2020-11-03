@@ -56,7 +56,7 @@ class AdminBookingController extends AbstractController
            // $manager->persist($booking); optionnel car le booking existe deja et lme manager l'a deja pris en compte
             $manager->flush();
             $this->addFlash('success', "La réservation <strong>{$booking->getId()}</strong> a bien été modifiée");
-            return $this->redirectToRoute('admin_bookings_index');
+            return $this->redirectToRoute('admin_booking_index');
         }
 
         return $this->render('admin/booking/edit.html.twig', [
