@@ -44,7 +44,7 @@ class AppFixtures extends Fixture
         $adminUser = new User();
         $adminUser->setFirstName("Yvan")
             ->setLastName("GILLES")
-            ->setEmail("ygilles@gmail.fr")
+            ->setEmail("admin@admin.fr")
             ->setHash($this->encoder->encodePassword($adminUser, 'password'))
             ->setPicture("https://randomuser.me/api/portraits/lego/5.jpg")
             ->setIntroduction($fake->sentence())
@@ -85,7 +85,7 @@ class AppFixtures extends Fixture
 
             $title = $fake->sentence();
             // $slug = $slugify->slugify($title);
-            $codeImage  = "http://loremflickr.com/300/200?random$i"; //$fake->imageUrl(200, 100);
+            $codeImage  = "http://loremflickr.com/300/200/appartment?random" . mt_rand(1, 10000); //$fake->imageUrl(200, 100);
             $introduction = $fake->paragraph(2);
             $content = '<p>' . join('</p><p>', $fake->paragraphs(5)) . '</p>';
 
@@ -104,7 +104,7 @@ class AppFixtures extends Fixture
             for ($j = 1; $j < mt_rand(2, 5); $j++) {
                 $image = new Image();
                 //  $image->setUrl($fake->imageUrl())
-                $image->setUrl("http://loremflickr.com/300/200?random" . mt_rand(1, 10000))
+                $image->setUrl("http://loremflickr.com/300/200/appartment?random" . mt_rand(1, 10000))
                     ->setCaption($fake->sentence())
                     ->setAd($ad);
                 $manager->persist($image);
